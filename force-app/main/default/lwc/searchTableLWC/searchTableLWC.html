@@ -1,0 +1,125 @@
+<template>
+   
+   <lightning-card title="Search Table Assignment">
+    <div class="slds-p-horizontal_small"><lightning-layout multiple-rows>
+    <lightning-layout-item size="3" padding="around-small">
+    <div style="font-weight:bold">
+    <lightning-combobox name="filter" style="width: 200px!important" label="Search By Type" class="searchFilter" value={selectedValue} variant="label-hidden" options={options} onchange={handleFilterChange} placeholder="Select to filter"> </lightning-combobox>
+    </div>
+    <lightning-layout-item size="3" padding="around-small"> <div style="font-weight:bold"> <lightning-input style="width: 200px!important" type="search"  class="searchBar" onchange={handleKeyChange}  label="Search"  value={searchKey}> </lightning-input> </div> </lightning-layout-item> </lightning-layout-item>
+    <lightning-layout-item size="3" padding="around-small"> 
+    <lightning-layout-item size="3" padding="around-small">
+    <div style="font-weight:bold;padding-top: 52px!important">
+    <lightning-button label="Search Button" class="searchButton" size="small"  variant="brand" onclick={handleFilterdSearch}  icon-name="utility:search" icon-position="right"> </lightning-button>
+    </div>
+    </lightning-layout-item>
+    </lightning-layout-item>
+    <lightning-layout-item size="3" padding="around-small">
+    <lightning-layout-item size="3" padding="around-small">
+    <div style="font-weight:bold;padding-top: 52px!important">
+    <lightning-button-icon slot="actions" icon-name="utility:sync" alternative-text="Refresh" onclick={refreshTodoList} title="Refresh"> </lightning-button-icon>
+     </div>
+    </lightning-layout-item>
+    </lightning-layout-item>
+    </lightning-layout>
+    </div>
+    </br>
+        <div>
+            <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped">
+                <thead>
+                <tr class="slds-line-height_reset">
+                <th class="" scope="col">
+                <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0" onclick={sortRecs} name="AccountNumber">
+                    {label.Opportunity_Name}
+                </a>
+                </th>
+                <th class="" scope="col">
+                <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0" onclick={sortRecs} name="Industry">
+                   {label.Opportunity_Description}
+                </a>
+                </th>
+                   
+                <th class="" scope="col">
+                <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0" onclick={sortRecs} name="Type">
+                    {label.Opportunity_Close_Date}
+                </a>
+                </th>
+                <th class="" scope="col">
+                <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0" onclick={sortRecs} name="Phone">
+                    {label.Associated_Account_Name}
+                </a>
+                </th>
+                <th class="" scope="col">
+                <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0" onclick={sortRecs} name="Active__c">
+                {label.Contact_Name}
+                </a>
+                </th>
+                <th class="" scope="col">
+                <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0" onclick={sortRecs} name="SLA__c">
+                {label.Contact_Email}
+                 </a>
+                </th>
+                <th class="" scope="col">
+                <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0" onclick={sortRecs} name="SLA__c">
+                {label.Contact_Phone}
+                </a>
+                </th>
+                </tr>
+                </thead>
+            <tbody>
+                <template if:true={opportunityList}>
+                 <template for:each={opportunityList} for:item="oppList" for:index="index">
+                    <tr class="slds-hint-parent" key = {oppList.Id}>
+                        <td data-label="Opportnity Name">
+                            <div class="slds-cell-wrap">{oppList.oppName}</div>
+                        </td>
+                        <td data-label="Opportnity Description">
+                            <div class="slds-cell-wrap">{oppList.oppDesc}</div>
+                        </td>
+                          <td data-label="Opportnity CloseDate">
+                            <div class="slds-cell-wrap">{oppList.oppCloseDate}</div>
+                        </td>
+                        
+                        <td data-label="Opportnity Account Name">
+                            <div class="slds-cell-wrap">{oppList.oppAccountName}</div>
+                        </td>
+                        <td data-label="Recent Contact Name">
+                            <div class="slds-cell-wrap">{oppList.mostRecentContact}</div>
+                        </td>
+                        <td data-label="Recent Contact Email">
+                            <div class="slds-cell-wrap">{oppList.mostRecentContactEmail}</div>
+                        </td>
+                        <td data-label="Recent Contact Phone">
+                            <div class="slds-cell-wrap">{oppList.mostRecentPhoneNumber}</div>
+                        </td>
+                       
+                    </tr>
+                </template>
+                </template>
+                <template if:true={isDisplayNoRecords}>
+                <div class="slds-align_absolute-center">
+                    <br/>
+                    No records found
+                </div>
+                </template>
+                        
+            </tbody>
+                </table>
+            </div>
+
+
+           <div class="slds-align_absolute-center">
+		    <div class="slds-p-right_xx-small">
+			<lightning-button label="Previous" disabled={isPrev} onclick={handlePrev} variant="brand" icon-name="utility:chevronleft" name="prev"></lightning-button>
+		    </div>
+		    <span class="slds-badge slds-badge_lightest">
+			{recordStart}-{recordEnd} of {totalRecords} | Page {pageNumber} of {totalPages}
+		    </span>
+		    <div class="slds-p-left_xx-small">
+			<lightning-button label="Next" disabled={isNext} onclick={handleNext} variant="brand" icon-name="utility:chevronright" icon-position="right" name="next"></lightning-button>
+		    </div>
+            </div>
+
+    </lightning-card>
+
+</template>
