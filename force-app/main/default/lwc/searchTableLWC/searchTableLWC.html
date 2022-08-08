@@ -1,7 +1,8 @@
 <template>
    
    <lightning-card title="Search Table Assignment">
-    <div class="slds-p-horizontal_small"><lightning-layout multiple-rows>
+    <!--<div class="slds-p-horizontal_small">
+    <lightning-layout multiple-rows>
     <lightning-layout-item size="3" padding="around-small">
     <div style="font-weight:bold">
     <lightning-combobox name="filter" style="width: 200px!important" label="Search By Type" class="searchFilter" value={selectedValue} variant="label-hidden" options={options} onchange={handleFilterChange} placeholder="Select to filter"> </lightning-combobox>
@@ -14,53 +15,67 @@
     </div>
     </lightning-layout-item>
     </lightning-layout-item>
-    <lightning-layout-item size="3" padding="around-small">
-    <lightning-layout-item size="3" padding="around-small">
-    <div style="font-weight:bold;padding-top: 52px!important">
-    <lightning-button-icon slot="actions" icon-name="utility:sync" alternative-text="Refresh" onclick={refreshTodoList} title="Refresh"> </lightning-button-icon>
-     </div>
-    </lightning-layout-item>
-    </lightning-layout-item>
-    </lightning-layout>
-    </div>
+   </lightning-layout>
+    </div>-->
     </br>
         <div>
+            <div class="slds-card__header slds-grid">
+          <header class="slds-media slds-media_center slds-has-flexi-truncate">
+            <div class="slds-media__figure">
+              <span class="slds-icon_container" title="search table">
+                <span ><lightning-combobox name="filter" style="width: 200px!important" label="Search By Type" class="searchFilter" value={selectedValue} variant="label-hidden" options={options} onchange={handleFilterChange} placeholder="Select to filter"> </lightning-combobox></span>
+              </span>&nbsp;&nbsp;&nbsp;
+               <span class="slds-icon_container" title="search table">
+                <span ><lightning-input style="width: 200px!important" type="search"  class="searchBar" onchange={handleKeyChange}    value={searchKey}> </lightning-input></span>
+              </span>&nbsp;&nbsp;&nbsp;
+              <span class="slds-icon_container" title="search table">
+                <span ><lightning-button label="Search Button" class="searchButton" size="small"  variant="brand" onclick={handleFilterdSearch}  icon-name="utility:search" icon-position="right"> </lightning-button></span>
+              </span>
+            </div>
+            <div class="slds-media__body">
+              <h2 class="slds-card__header-title">
+                 <span class="slds-text-heading_small"></span>
+              </h2>
+            </div>
+            
+          </header>
+        </div>
             <table class="slds-table slds-table_cell-buffer slds-table_bordered slds-table_striped">
                 <thead>
                 <tr class="slds-line-height_reset">
                 <th class="" scope="col">
-                <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0" onclick={sortRecs} name="AccountNumber">
+                <a class="slds-th__action slds-text-link_reset"  name="OpportunityName">
                     {label.Opportunity_Name}
                 </a>
                 </th>
                 <th class="" scope="col">
-                <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0" onclick={sortRecs} name="Industry">
+                <a class="slds-th__action slds-text-link_reset"  name="Opportunity_Description">
                    {label.Opportunity_Description}
                 </a>
                 </th>
                    
                 <th class="" scope="col">
-                <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0" onclick={sortRecs} name="Type">
+                <a class="slds-th__action slds-text-link_reset"  name="Opportunity_Close_Date">
                     {label.Opportunity_Close_Date}
                 </a>
                 </th>
                 <th class="" scope="col">
-                <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0" onclick={sortRecs} name="Phone">
+                <a class="slds-th__action slds-text-link_reset"  name="Associated_Account_Name">
                     {label.Associated_Account_Name}
                 </a>
                 </th>
                 <th class="" scope="col">
-                <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0" onclick={sortRecs} name="Active__c">
+                <a class="slds-th__action slds-text-link_reset"  name="Contact_Name">
                 {label.Contact_Name}
                 </a>
                 </th>
                 <th class="" scope="col">
-                <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0" onclick={sortRecs} name="SLA__c">
+                <a class="slds-th__action slds-text-link_reset"  name="Contact_Email">
                 {label.Contact_Email}
                  </a>
                 </th>
                 <th class="" scope="col">
-                <a class="slds-th__action slds-text-link_reset" href="javascript:void(0);" role="button" tabindex="0" onclick={sortRecs} name="SLA__c">
+                <a class="slds-th__action slds-text-link_reset"  name="Contact_Phone">
                 {label.Contact_Phone}
                 </a>
                 </th>
@@ -99,7 +114,7 @@
                 <template if:true={isDisplayNoRecords}>
                 <div class="slds-align_absolute-center">
                     <br/>
-                    No records found
+                    No records found.
                 </div>
                 </template>
                         
