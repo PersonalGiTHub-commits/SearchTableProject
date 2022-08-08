@@ -11,23 +11,23 @@ import Contact_Phone  from '@salesforce/label/c.Contact_Number';
 
 
 export default class SearchTableController extends LightningElement {
-     @track isLoading = false;
-     @track loader = false;
-     @track error = null;
-     @track pageSize = 3;
-     @track pageNumber = 1;
-     @track totalRecords = 0;
-     @track totalPages = 0;
-     @track recordEnd = 0;
-     @track recordStart = 0;
-     @track isPrev = true;
-     @track isNext = true;
-     @track searchKey = '';
+     isLoading = false;
+     loader = false;
+     error = null;
+     @api pageSize;
+     pageNumber = 1;
+     totalRecords = 0;
+     totalPages = 0;
+     recordEnd = 0;
+     recordStart = 0;
+     isPrev = true;
+     isNext = true;
+     searchKey = '';
      @track opportunityList = [];
      @track mapFilterBySearch = {};
-     @track refreshedRecord ;
+     
      isDisplayNoRecords=true;
-     @track selectedValue;
+     selectedValue;
      
 
       label={
@@ -61,12 +61,12 @@ export default class SearchTableController extends LightningElement {
     }
     handleNext() {
         this.pageNumber = this.pageNumber + 1;
-       this.handleFilterdSearch();
+        this.handleFilterdSearch();
     }
 
     handlePrev() {
         this.pageNumber = this.pageNumber - 1;
-       this.handleFilterdSearch();
+        this.handleFilterdSearch();
     }
 
      handleKeyChange(event) {
@@ -75,13 +75,14 @@ export default class SearchTableController extends LightningElement {
 
 
 
-
      handleFilterdSearch(){
          
         let filterCmp = this.template.querySelector(".searchFilter");
         let searchBarCmp = this.template.querySelector(".searchBar");
+        
         let filterValue = filterCmp.value;
         let searchBarCmpValue = searchBarCmp.value;
+        console.log('searchBarCmpValue',searchBarCmpValue.length);
         
         if (filterValue=='None' || filterValue=='' || filterValue==undefined) {
             filterCmp.setCustomValidity("search filter is required");
@@ -90,8 +91,15 @@ export default class SearchTableController extends LightningElement {
         }
             filterCmp.reportValidity();
 
+        if (searchBarCmpValue=='' || searchBarCmpValue.length<=1) {
+            searchBarCmp.setCustomValidity("search key is required and must be more than 1 charecters");
+        } else {
+            searchBarCmp.setCustomValidity("");
+        }
+            searchBarCmp.reportValidity();
+
        
-       if((filterValue!= 'None' || filterValue!='' || filterValue!=undefined) )
+       if((filterValue!= 'None' || filterValue!='' || filterValue!=undefined) && (searchBarCmpValue!='' && searchBarCmpValue.length>=2))
        {
         this.mapFilterBySearch[this.selectedValue] =  this.searchKeyCmp;
        
@@ -149,11 +157,7 @@ export default class SearchTableController extends LightningElement {
             
        
     }
-      refreshTodoList() {
-            this.handleFilterdSearch();
-            
-      
-    }
+     
     
    
     
