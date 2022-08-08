@@ -19,11 +19,15 @@ public with sharing class AllServiceRequest implements IOpportunityRequestInterf
         try
         {
         if(searchFilterKey == 'All' && searchKeyquery!= null){
-           String myQuery1 = 'FIND \'' + searchKeyquery + '\'  IN ALL FIELDS RETURNING Account(ID,NAME WHERE NAME Like  \'%' + searchKeyquery + '%\'  LIMIT :pageSize OFFSET :offset),Contact(NAME,AccountId WHERE NAME Like  \'%' + searchKeyquery + '%\' LIMIT :pageSize OFFSET :offset ),Opportunity(NAME,DESCRIPTION,CLOSEDATE,ACCOUNTID,ACCOUNT.NAME,STAGENAME WHERE NAME Like  \'%' + searchKeyquery + '%\'  LIMIT :pageSize OFFSET :offset)';
+           String myQuery1 = 'FIND \'' + searchKeyquery + '\'  IN ALL FIELDS RETURNING Account(ID,NAME WHERE NAME Like  \'%' + searchKeyquery + '%\'  LIMIT :pageSize OFFSET :offset),Contact(NAME,Email,Phone,AccountId WHERE NAME Like  \'%' + searchKeyquery + '%\' LIMIT :pageSize OFFSET :offset ),Opportunity(NAME,DESCRIPTION,CLOSEDATE,ACCOUNTID,ACCOUNT.NAME,STAGENAME WHERE NAME Like  \'%' + searchKeyquery + '%\'  LIMIT :pageSize OFFSET :offset)';
+           
             List<List<sObject>> searchList = System.Search.query(myQuery1);
             List <Account> searchAccounts = searchList.get(0);
+            System.debug('searchAccounts'+searchAccounts);
             List <Contact> searchContact = searchList.get(1);
+            System.debug('searchContact'+searchContact);
             List <Opportunity> searchOpportunity = searchList.get(2);
+            System.debug('searchOpportunity'+searchOpportunity);
             Integer totalRecords= searchList[0].size() +searchList[1].size()+searchList[2].size();
            	opw.recordEnd = totalRecords >= recordEnd ? recordEnd : totalRecords;
 			opw.totalRecords = totalRecords;
@@ -67,6 +71,7 @@ public with sharing class AllServiceRequest implements IOpportunityRequestInterf
 
 
                                     if(searchContact.size()>0){
+                                         System.debug('searchContact.'+searchContact);
                                                 for(Contact oppcont : searchContact) { 
                                                      oplw = new OpportunityListWrapper();
                                                       if (!string.isEmpty(oppcont.accountid))
@@ -83,13 +88,12 @@ public with sharing class AllServiceRequest implements IOpportunityRequestInterf
                                 							  oplw.oppCloseDate=oppVar.closeDate;
                                                               }
                                                           }
-                                                       
-                                                        List<Contact> cc=[Select accountid, name,email, createddate,phone  from contact where accountid =:oppcont.accountid order by createdDate desc limit 1];
-                                                          if(cc.size()>0){
-                                                        oplw.mostRecentContact=cc[0].name;
-                                                        oplw.mostRecentContactEmail=cc[0].email;
-                                                        oplw.mostRecentPhoneNumber=cc[0].phone;
-                                                          }
+                                                        
+                                                        oplw.mostRecentContact=oppcont.name;
+                                                        oplw.mostRecentContactEmail=oppcont.email;
+                                                        oplw.mostRecentPhoneNumber=oppcont.phone;
+                                                               System.debug(' oplwcc2.'+ oplw);
+                                                          
                                                         }
                                                     opplistWrapper.add(oplw);
                                                     opw.serviceCode='OK';
@@ -98,6 +102,7 @@ public with sharing class AllServiceRequest implements IOpportunityRequestInterf
                                     }
             
                               if(searchOpportunity.size()>0){
+                                  System.debug('searchOpportunity.'+searchOpportunity);
                                          for(Opportunity opp : searchOpportunity) {
                                              oplw = new OpportunityListWrapper();
                                               oplw.oppName = opp.Name;
@@ -123,11 +128,11 @@ public with sharing class AllServiceRequest implements IOpportunityRequestInterf
                                                 }
                                             }
                                            return opw;
-        }  Catch(exception e){
-      ExceptionHandler.logHandledExceptions(e,'AllServiceRequest','getOppsListBasedOnFilter','AllServiceRequestManagement');
-            return null;
-        }
-       }
+                                }  Catch(exception e){
+                                        ExceptionHandler.logHandledExceptions(e,'AllServiceRequest','getOppsListBasedOnFilter','AllServiceRequestManagement');
+                                        return null;
+                                }
+                            }
     
     public static String  getMaskedRecord(String acceptedString)
     {
